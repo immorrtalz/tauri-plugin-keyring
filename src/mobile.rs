@@ -20,7 +20,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     use android_native_keyring_store::AndroidStore;
     let store = AndroidStore::from_ndk_context().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
     keyring_core::set_default_store(store);
-    let handle = api.register_android_plugin("com.alaydriem.bvc.plugin.keyring", "KeyringPlugin")?;
+    let handle = api.register_android_plugin("com.charlesportwoodii.tauri.plugin.keyring", "KeyringPlugin")?;
     Ok(Keyring(handle))
   }
 
@@ -45,19 +45,19 @@ impl<R: Runtime> Keyring<R> {
   pub fn initialize_service(&self, service_name: String) -> crate::Result<()> {
     KeyringImplementation::initialize_service(service_name)
   }
-  
+
   pub fn set(&self, username: &str, credential_type: CredentialType, value: CredentialValue) -> crate::Result<()> {
     self.implementation().set(username, credential_type, value)
   }
-  
+
   pub fn get(&self, username: &str, credential_type: CredentialType) -> crate::Result<CredentialValue> {
     self.implementation().get(username, credential_type)
   }
-  
+
   pub fn delete(&self, username: &str, credential_type: CredentialType) -> crate::Result<()> {
     self.implementation().delete(username, credential_type)
   }
-  
+
   pub fn exists(&self, username: &str, credential_type: CredentialType) -> crate::Result<bool> {
     self.implementation().exists(username, credential_type)
   }
