@@ -1,4 +1,4 @@
-package com.alaydriem.bvc.plugin.keyring
+package com.charlesportwoodii.tauri.plugin.keyring
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
@@ -19,7 +19,7 @@ class KeyringInstrumentedTest {
     @Test
     fun testContextPackageName() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.alaydriem.bvc.plugin.keyring", appContext.packageName)
+        assertEquals("com.charlesportwoodii.tauri.plugin.keyring", appContext.packageName)
     }
     
     @Test 

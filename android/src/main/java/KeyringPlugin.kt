@@ -1,4 +1,4 @@
-package com.alaydriem.bvc.plugin.keyring
+package com.charlesportwoodii.tauri.plugin.keyring
 
 import android.app.Activity
 import app.tauri.annotation.TauriPlugin

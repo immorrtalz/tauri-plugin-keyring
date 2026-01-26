@@ -1,4 +1,4 @@
-package com.alaydriem.bvc.plugin.keyring
+package com.charlesportwoodii.tauri.plugin.keyring
 
 import org.junit.Test
 import org.junit.Assert.*
@@ -17,7 +17,7 @@ class KeyringPluginTest {
         // Verify that the KeyringPlugin class exists and can be referenced
         val pluginClass = KeyringPlugin::class.java
         assertNotNull("KeyringPlugin class should exist", pluginClass)
-        assertEquals("Plugin should have correct package", "com.alaydriem.bvc.plugin.keyring", pluginClass.packageName)
+        assertEquals("Plugin should have correct package", "com.charlesportwoodii.tauri.plugin.keyring", pluginClass.packageName)
     }
     
     @Test
