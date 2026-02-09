@@ -68,31 +68,29 @@ impl KeyringImplementation {
         }
     }
 
-    /// Delete a credential after checking if it exists
+    /// Delete a credential
     pub fn delete(&self, username: &str, credential_type: CredentialType) -> crate::Result<()> {
         tauri_plugin_log::log::debug!("Deleting {} for user: {}", credential_type, username);
 
-        // Try to get first - if it doesn't exist, consider it already deleted
-        match self.get(username, credential_type.clone()) {
-            Ok(_) => {
-                let entry = Self::create_entry(username, &credential_type)?;
-                entry.delete_credential().map_err(Into::into)
-            },
-            Err(crate::Error::EntryNotFound) => {
+        let entry = Self::create_entry(username, &credential_type)?;
+        match entry.delete_credential() {
+            Ok(()) => Ok(()),
+            Err(keyring_core::Error::NoEntry) => {
                 tauri_plugin_log::log::debug!("Entry already doesn't exist for user: {}", username);
-                Ok(()) // Already deleted
+                Ok(())
             },
-            Err(e) => Err(e),
+            Err(e) => Err(e.into()),
         }
     }
 
     /// Check if a credential exists
     pub fn exists(&self, username: &str, credential_type: CredentialType) -> crate::Result<bool> {
         tauri_plugin_log::log::debug!("Checking existence of {} for user: {}", credential_type, username);
-        match self.get(username, credential_type) {
+        let entry = Self::create_entry(username, &credential_type)?;
+        match entry.get_credential() {
             Ok(_) => Ok(true),
-            Err(crate::Error::EntryNotFound) => Ok(false),
-            Err(e) => Err(e),
+            Err(keyring_core::Error::NoEntry) => Ok(false),
+            Err(e) => Err(e.into()),
         }
     }
 }
