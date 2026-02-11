@@ -26,7 +26,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
   
   #[cfg(target_os = "macos")]
   {
-    use apple_native_keyring_store::keychain::Store as MacOSStore;
+    use apple_native_keyring_store::protected::Store as MacOSStore;
     let store = MacOSStore::new().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
     keyring_core::set_default_store(store);
   }
