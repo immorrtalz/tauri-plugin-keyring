@@ -37,7 +37,7 @@ Install the Core plugin by adding the following to your `Cargo.toml` file:
 `src-tauri/Cargo.toml`
 ```toml
 [dependencies]
-tauri-plugin-keyring = "0.1.0"
+tauri-plugin-keyring = "0.2.0"
 
 # alternatively with Git:
 tauri-plugin-keyring = { git = "https://github.com/charlesportwoodii/tauri-plugin-keyring", branch = "master" }
@@ -58,7 +58,7 @@ If you prefer the in-kernel keyutils backend instead (no D-Bus, session-scoped s
 
 ```toml
 [dependencies]
-tauri-plugin-keyring = { version = "0.1.0", default-features = false, features = ["linux-keyutils"] }
+tauri-plugin-keyring = { version = "0.2.0", default-features = false, features = ["linux-keyutils"] }
 ```
 
 You can install the JavaScript Guest bindings using your preferred JavaScript package manager:

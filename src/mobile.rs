@@ -17,8 +17,11 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
 ) -> crate::Result<Keyring<R>> {
   #[cfg(target_os = "android")]
   {
-    use android_native_keyring_store::AndroidStore;
-    let store = AndroidStore::from_ndk_context().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
+    // keyring-core 1.0 store. The Android context/JavaVM are read from the global
+    // `ndk_context`, which Tauri's Android runtime initializes for us, so no extra
+    // JNI setup (the crate's `initializeNdkContext`) is required here.
+    use android_native_keyring_store::Store as AndroidStore;
+    let store = AndroidStore::new().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
     keyring_core::set_default_store(store);
     let handle = api.register_android_plugin("com.charlesportwoodii.tauri.plugin.keyring", "KeyringPlugin")?;
     Ok(Keyring(handle))
