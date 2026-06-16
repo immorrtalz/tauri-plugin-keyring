@@ -8,7 +8,7 @@ This plugin provides cross-platform keyring/keychain access for Tauri applicatio
 
 | Platform | Support |
 |----------|---------|
-| Linux    | X       |
+| Linux    | ✓       |
 | Windows  | ✓       |
 | macOS    | ✓       |
 | Android  | ✓       |
@@ -19,6 +19,7 @@ This plugin provides cross-platform keyring/keychain access for Tauri applicatio
 - **Windows**: Uses Windows Credential Manager with hardware-backed security when available
 - **macOS/iOS**: Leverages Apple Keychain Services with Secure Enclave support
 - **Android**: Uses Android Keystore system with hardware security module backing
+- **Linux**: Uses the D-Bus Secret Service (e.g. GNOME Keyring / KWallet) by default; the kernel keyutils backend is also available via the `linux-keyutils` feature
 - **Cross-platform**: Unified API with platform-specific optimizations
 
 ## Install
@@ -40,6 +41,24 @@ tauri-plugin-keyring = "0.1.0"
 
 # alternatively with Git:
 tauri-plugin-keyring = { git = "https://github.com/charlesportwoodii/tauri-plugin-keyring", branch = "master" }
+```
+
+### Linux
+
+On Linux the plugin uses the D-Bus Secret Service by default, which talks to your desktop's secret store (GNOME Keyring, KWallet, etc.). This requires the system D-Bus development package at build time — the same dependency Tauri itself needs on Linux:
+
+```bash
+# Debian/Ubuntu
+sudo apt install libdbus-1-dev pkg-config
+# Fedora
+sudo dnf install dbus-devel pkgconf-pkg-config
+```
+
+If you prefer the in-kernel keyutils backend instead (no D-Bus, session-scoped storage), opt out of the default and enable the `linux-keyutils` feature:
+
+```toml
+[dependencies]
+tauri-plugin-keyring = { version = "0.1.0", default-features = false, features = ["linux-keyutils"] }
 ```
 
 You can install the JavaScript Guest bindings using your preferred JavaScript package manager:

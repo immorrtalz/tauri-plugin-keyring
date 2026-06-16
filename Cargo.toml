@@ -8,6 +8,12 @@ rust-version = "1.77.2"
 exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
 links = "tauri-plugin-keyring"
 
+[features]
+default = ["dbus-secret-service"]
+# Linux backends (mutually exclusive). dbus-secret-service is the default.
+dbus-secret-service = ["dbus-secret-service-keyring-store"]
+linux-keyutils = ["linux-keyutils-keyring-store"]
+
 [dependencies]
 tauri = { version = "^2" }
 serde = "1.0"
@@ -26,6 +32,10 @@ windows-native-keyring-store = "0.1.0"
 
 [target."cfg(any(target_os = \"android\"))".dependencies]
 android-native-keyring-store = "0.3.0"
+
+[target."cfg(any(target_os = \"linux\"))".dependencies]
+dbus-secret-service-keyring-store = { version = "1.0.0", features = ["crypto-rust"], optional = true }
+linux-keyutils-keyring-store = { version = "1.0.0", optional = true }
 
 [build-dependencies]
 tauri-plugin = { version = "2.4.0", features = ["build"] }
