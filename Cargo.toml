@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-keyring"
-version = "0.1.0"
+version = "0.2.0"
 authors = [ "You" ]
 description = ""
 edition = "2021"
@@ -8,24 +8,34 @@ rust-version = "1.77.2"
 exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
 links = "tauri-plugin-keyring"
 
+[features]
+default = ["dbus-secret-service"]
+# Linux backends (mutually exclusive). dbus-secret-service is the default.
+dbus-secret-service = ["dbus-secret-service-keyring-store"]
+linux-keyutils = ["linux-keyutils-keyring-store"]
+
 [dependencies]
 tauri = { version = "^2" }
 serde = "1.0"
 thiserror = "2"
-keyring-core = "0.5.0"
+keyring-core = "1.0.0"
 base64 = "0.22"
 tauri-specta = { version = "2.0.0-rc.21", features = ["typescript"] }
 tauri-plugin-log = "^2"
 specta = { version = "1.0.5", features = ["serde"] }
 
 [target."cfg(any(target_os = \"macos\", target_os = \"ios\"))".dependencies]
-apple-native-keyring-store = "0.1.0"
+apple-native-keyring-store = "1.0.0"
 
 [target."cfg(any(target_os = \"windows\"))".dependencies]
-windows-native-keyring-store = "0.1.0"
+windows-native-keyring-store = "1.1.0"
 
 [target."cfg(any(target_os = \"android\"))".dependencies]
-android-native-keyring-store = "0.3.0"
+android-native-keyring-store = "1.0.0"
+
+[target."cfg(any(target_os = \"linux\"))".dependencies]
+dbus-secret-service-keyring-store = { version = "1.0.0", features = ["crypto-rust"], optional = true }
+linux-keyutils-keyring-store = { version = "1.0.0", optional = true }
 
 [build-dependencies]
 tauri-plugin = { version = "2.4.0", features = ["build"] }

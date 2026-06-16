@@ -30,8 +30,26 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     let store = MacOSStore::new().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
     keyring_core::set_default_store(store);
   }
-  
-  #[cfg(not(any(target_os = "windows", target_os = "macos")))]
+
+  #[cfg(target_os = "linux")]
+  {
+    // dbus-secret-service is the default; linux-keyutils is an opt-in alternative.
+    // If both are enabled, dbus-secret-service takes precedence.
+    #[cfg(feature = "dbus-secret-service")]
+    use dbus_secret_service_keyring_store::Store as LinuxStore;
+    #[cfg(all(feature = "linux-keyutils", not(feature = "dbus-secret-service")))]
+    use linux_keyutils_keyring_store::Store as LinuxStore;
+    #[cfg(not(any(feature = "dbus-secret-service", feature = "linux-keyutils")))]
+    compile_error!(
+      "On Linux, enable exactly one keyring backend feature: \
+       \"dbus-secret-service\" (default) or \"linux-keyutils\"."
+    );
+
+    let store = LinuxStore::new().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
+    keyring_core::set_default_store(store);
+  }
+
+  #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
   {
     use keyring_core::mock::Store;
     let store = Store::new().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
