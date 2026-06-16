@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-keyring"
-version = "0.2.0"
+version = "0.2.1"
 authors = [ "You" ]
 description = ""
 edition = "2021"
@@ -25,7 +25,9 @@ tauri-plugin-log = "^2"
 specta = { version = "1.0.5", features = ["serde"] }
 
 [target."cfg(any(target_os = \"macos\", target_os = \"ios\"))".dependencies]
-apple-native-keyring-store = "1.0.0"
+# `protected` enables the Protected Data store used on both macOS and iOS
+# (required on iOS, where the crate errors without it).
+apple-native-keyring-store = { version = "1.0.0", features = ["protected"] }
 
 [target."cfg(any(target_os = \"windows\"))".dependencies]
 windows-native-keyring-store = "1.1.0"
