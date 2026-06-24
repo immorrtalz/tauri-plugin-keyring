@@ -20,9 +20,7 @@ serde = "1.0"
 thiserror = "2"
 keyring-core = "1.0.0"
 base64 = "0.22"
-tauri-specta = { version = "2.0.0-rc.21", features = ["typescript"] }
 tauri-plugin-log = "^2"
-specta = { version = "1.0.5", features = ["serde"] }
 
 [target."cfg(any(target_os = \"macos\", target_os = \"ios\"))".dependencies]
 # `protected` enables the Protected Data store used on both macOS and iOS
